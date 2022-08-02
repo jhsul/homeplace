@@ -1,0 +1,28 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+
+.vbox {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.navbar {
+  width: 100%;
+  border: 1px solid red;
+}
+
+.login {
+  @extend .vbox;
+  border: 1px solid blue;
+  width: min(100%, 200pt);
+}
+
+.signup {
+  @extend .vbox;
+  border: 1px solid red;
+  width: min(100%, 200pt);
+}
