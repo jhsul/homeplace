@@ -4,15 +4,12 @@ body {
   margin: 0;
 }
 
+@import "../node_modules/bootstrap/scss/bootstrap";
+
 .vbox {
   display: flex;
   flex-direction: column;
   width: 100%;
-}
-
-.navbar {
-  width: 100%;
-  border: 1px solid red;
 }
 
 .login {

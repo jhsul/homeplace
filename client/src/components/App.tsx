@@ -1,5 +1,8 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
+import Modal from "react-modal";
+
 import connection from "../connection";
+import Board from "./Board";
 import Login from "./Login";
 import Nav from "./Nav";
 import Signup from "./Signup";
@@ -20,18 +23,9 @@ const App: FunctionComponent = () => {
     };
   }, []);
   return (
-    <div className="vbox">
+    <div id="app" className="vbox">
       <Nav />
-      <h1>Messages</h1>
-      <div>{JSON.stringify(messages)}</div>
-
-      {error && <div>{JSON.stringify(error)} </div>}
-
-      <Login />
-
-      <br />
-
-      <Signup />
+      <Board />
     </div>
   );
 };
