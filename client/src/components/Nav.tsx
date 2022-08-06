@@ -5,12 +5,24 @@ import useUser from "../hooks/user";
 import Login from "./Login";
 
 const Nav: FunctionComponent = () => {
-  const { user } = useUser();
+  const { user, mutate } = useUser();
 
   //const user = { name: "John Doe" };
 
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isSigningUp, setIsSigningUp] = useState(false);
+
+  const handleLogout = () => {
+    if (!user) {
+      console.log("User is not logged in");
+      return;
+    }
+
+    console.log(`Logging out user ${user}`);
+    document.cookie = `${import.meta.env.COOKIE!}`;
+
+    mutate(null);
+  };
 
   return (
     <>

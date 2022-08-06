@@ -23,3 +23,7 @@ body {
   border: 1px solid red;
   width: min(100%, 200pt);
 }
+
+.board-container {
+  overflow-y: scroll;
+}
