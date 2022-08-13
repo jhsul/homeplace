@@ -6,7 +6,7 @@ const Login: FunctionComponent = () => {
 
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!nameRef.current || !passRef.current) {
       console.error("Bad refs");
       return;
@@ -14,7 +14,25 @@ const Login: FunctionComponent = () => {
 
     console.log("Logging in");
 
-    console.log({ name: nameRef.current, pass: passRef.current });
+    const body = {
+      name: nameRef.current.value,
+      pass: passRef.current.value,
+    };
+
+    const res = await fetch("/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+
+    const data = await res.json();
+
+    if (res.status !== 200) {
+      setError(data.error);
+      return;
+    }
+
+    console.log("Logged in");
   };
   return (
     <div className="login">
@@ -23,6 +41,8 @@ const Login: FunctionComponent = () => {
 
       <b>password</b>
       <input ref={passRef} type="password" />
+
+      {error && <p className="text-danger">{error}</p>}
 
       <button onClick={handleSubmit}>Log In</button>
     </div>

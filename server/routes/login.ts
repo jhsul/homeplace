@@ -24,6 +24,7 @@ const login: RequestHandler = async (req, res) => {
   req.session.name = name;
 
   res.status(200).json({ success: "Login successful" });
+  return;
 };
 
 export default login;

@@ -26,7 +26,7 @@ const Nav: FunctionComponent = () => {
 
   return (
     <>
-      <nav className="navbar navbar-expand-md navbar-light bg-light px-2">
+      <nav className="navbar navbar-expand-md navbar-light bg-light sticky-top px-2">
         <a className="navbar-brand" href="#">
           {user ? `Hello, ${user.name}` : "Welcome :)"}
         </a>
@@ -77,28 +77,52 @@ const Nav: FunctionComponent = () => {
                 </a>
               </div>
             </li>
-
-            {user ? (
-              <li className="nav-item">
-                <button className="btn btn-danger">Log Out</button>
-              </li>
-            ) : (
-              <>
-                <li className="nav-item">
-                  <a
-                    className="nav-link"
-                    onClick={function () {
-                      setIsLoggingIn(true);
-                    }}
-                  >
-                    Login
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <button className="btn btn-primary">Sign Up</button>
-                </li>
-              </>
-            )}
+            <li className="nav-item dropdown">
+              <a
+                className="dropdown-toggle btn btn-outline-secondary"
+                href="#"
+                id="userDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                {user ? `Hello, ${user.name}` : "Guest"}
+              </a>
+              <div
+                className="dropdown-menu dropdown-menu-end"
+                aria-labelledby="userDropdown"
+              >
+                {user ? (
+                  <>
+                    <a className="dropdown-item" onClick={handleLogout}>
+                      Log Out
+                    </a>
+                  </>
+                ) : (
+                  <>
+                    <a
+                      className="dropdown-item"
+                      role="button"
+                      onClick={function () {
+                        setIsLoggingIn(true);
+                      }}
+                    >
+                      Log In
+                    </a>
+                    <a
+                      className="dropdown-item"
+                      role="button"
+                      onClick={function () {
+                        setIsSigningUp(true);
+                      }}
+                    >
+                      Sign Up
+                    </a>
+                  </>
+                )}
+              </div>
+            </li>
           </ul>
         </div>
       </nav>
