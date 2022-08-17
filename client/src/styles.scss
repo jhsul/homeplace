@@ -6,15 +6,24 @@ body {
 
 @import "../node_modules/bootstrap/scss/bootstrap";
 
+#app {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  //border: 1px solid red;
+}
+
 .vbox {
   display: flex;
   flex-direction: column;
-  width: 100%;
 }
 
 .login {
   @extend .vbox;
-  border: 1px solid blue;
+  padding: 20pt;
+  //border: 1px solid red;
   width: min(100%, 200pt);
 }
 
@@ -24,5 +33,10 @@ body {
   width: min(100%, 200pt);
 }
 
-.board-container {
+#board {
+  border: 1px solid green;
+}
+
+.placer {
+  border: 1px solid purple;
 }

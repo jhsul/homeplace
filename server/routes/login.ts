@@ -6,9 +6,9 @@ import { getDb } from "../db";
 const login: RequestHandler = async (req, res) => {
   const db = await getDb();
 
-  const { name, password } = req.body;
+  const { username, password } = req.body;
 
-  const user = await db.collection("users").findOne({ name });
+  const user = await db.collection("users").findOne({ username });
 
   if (!user) {
     res.status(404).json({ error: "User not found" });
@@ -21,7 +21,7 @@ const login: RequestHandler = async (req, res) => {
   }
 
   //@ts-ignore
-  req.session.name = name;
+  req.session.username = username;
 
   res.status(200).json({ success: "Login successful" });
   return;

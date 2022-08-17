@@ -18,12 +18,21 @@ const App: FunctionComponent = () => {
     connection.onerror = (err) => {
       setError(err);
     };
+
+    connection.addEventListener("message", (event) => {
+      const message = JSON.parse(event.data);
+      if (message?.type === "placement") {
+        console.log(message);
+      }
+    });
+    /*
     connection.onmessage = (ev) => {
       setMessages((msgs: any[]) => [...msgs, ev.data]);
     };
+    */
   }, []);
   return (
-    <div id="app" className="vbox">
+    <div id="app">
       <Nav />
       <Board />
     </div>

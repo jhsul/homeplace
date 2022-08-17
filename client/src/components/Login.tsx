@@ -1,12 +1,19 @@
-import { FunctionComponent, useRef, useState } from "react";
+import { FormEventHandler, FunctionComponent, useRef, useState } from "react";
+import useUser from "../hooks/user";
 
-const Login: FunctionComponent = () => {
+interface LoginProps {
+  setIsLoggingIn: (value: boolean) => void;
+}
+
+const Login: FunctionComponent<LoginProps> = ({ setIsLoggingIn }) => {
+  const { username, mutate } = useUser();
   const nameRef = useRef<HTMLInputElement | null>(null);
   const passRef = useRef<HTMLInputElement | null>(null);
 
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async () => {
+  const handleSubmit: FormEventHandler = async (e) => {
+    e.preventDefault();
     if (!nameRef.current || !passRef.current) {
       console.error("Bad refs");
       return;
@@ -15,8 +22,8 @@ const Login: FunctionComponent = () => {
     console.log("Logging in");
 
     const body = {
-      name: nameRef.current.value,
-      pass: passRef.current.value,
+      username: nameRef.current.value,
+      password: passRef.current.value,
     };
 
     const res = await fetch("/login", {
@@ -33,19 +40,37 @@ const Login: FunctionComponent = () => {
     }
 
     console.log("Logged in");
+
+    mutate({ username: body.username });
+    setIsLoggingIn(false);
   };
   return (
-    <div className="login">
-      <b>name</b>
-      <input ref={nameRef} type="text" />
+    <form onSubmit={handleSubmit} className="p-4">
+      <div className="form-group">
+        <b>Username:</b>
+        <input ref={nameRef} className="form-control" type="text" autoFocus />
+      </div>
 
-      <b>password</b>
-      <input ref={passRef} type="password" />
-
+      <div className="form-group">
+        <b>Password:</b>
+        <input ref={passRef} className="form-control" type="password" />
+      </div>
       {error && <p className="text-danger">{error}</p>}
 
-      <button onClick={handleSubmit}>Log In</button>
-    </div>
+      <button type="submit" className="btn btn-primary my-2 me-2">
+        Log In
+      </button>
+
+      <button
+        className="btn btn-secondary"
+        type="button"
+        onClick={() => {
+          setIsLoggingIn(false);
+        }}
+      >
+        Cancel
+      </button>
+    </form>
   );
 };
 

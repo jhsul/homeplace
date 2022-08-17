@@ -6,19 +6,40 @@ import dotenv from "dotenv";
 import MongoStore from "connect-mongo";
 
 dotenv.config({ path: "../.env" });
-console.log("Environment variables loaded");
+
+import auth from "./middleware/auth";
 
 import login from "./routes/login";
 import signup from "./routes/signup";
 import me from "./routes/me";
-//console.log(process.env);
+import logout from "./routes/logout";
+import place from "./routes/place";
+import board from "./routes/board";
+
+import type { WebSocketMessage } from "./messages";
+import { getDb } from "./db";
+import { getRedis } from "./redis";
 
 const port = process.env.PORT || 3001;
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
 
-const store = MongoStore.create({ mongoUrl: process.env.MONGO_URI! });
+const store = MongoStore.create({
+  mongoUrl: process.env.MONGO_URI!,
+  dbName: "home",
+});
+export const broadcast = (message: WebSocketMessage) => {
+  console.log("Broadcasting", message, `to ${wss.clients.size} clients`);
+  for (const client of wss.clients) {
+    client.send(JSON.stringify(message));
+  }
+};
+
+// Establish connections to redis and mongo
+
+getRedis();
+getDb();
 
 store.on("update", () => {
   console.log("Session updated");
@@ -31,7 +52,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   session({
     secret: process.env.SECRET!,
-    name: "cia-nsa-metaverse-tracking-id",
+    name: process.env.COOKIE_NAME!,
     resave: false,
     saveUninitialized: true,
     //cookie: { secure: true },
@@ -45,20 +66,24 @@ app.use(express.static("../client/dist"));
 
 // API routes
 app.post("/login", login);
-app.post("/signup", signup);
+app.get("/board", board);
 
-app.get("/me", me);
+app.post("/signup", signup);
+app.post("/place", auth, place);
+app.get("/me", auth, me);
+app.delete("/me", auth, logout);
 
 // Websocket server
 wss.on("connection", (ws: WebSocket, req: Request) => {
-  console.log(`New websocket connection!`);
+  //console.log(`New websocket connection!`);
   //console.log(req.headers);
+  broadcast({ type: "userCount", data: wss.clients.size });
 
   ws.onclose = () => {
-    console.log("Connection closed");
+    broadcast({ type: "userCount", data: wss.clients.size });
   };
 
-  ws.send("Hi from the server :)");
+  //ws.send("Hi from the server :)");
 });
 
 server.listen(port, () => {
