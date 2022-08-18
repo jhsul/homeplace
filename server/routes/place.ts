@@ -56,7 +56,7 @@ const place: RequestHandler = async (req, res) => {
     process.env.REDIS_KEY!,
     "SET",
     "u4",
-    (x + parseInt(process.env.WIDTH!) * y).toString(),
+    `#${(x + 512 * y).toString()}`,
     color.toString(),
   ];
 

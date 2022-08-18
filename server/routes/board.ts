@@ -10,7 +10,7 @@ const board: RequestHandler = async (req, res) => {
     commandOptions({ returnBuffers: true }),
     process.env.REDIS_KEY!
   );
-  console.log("Board: " + board);
+  console.log("Board: " + board?.buffer.byteLength);
   //console.log(Buffer.from(board));
   res.status(200).end(board);
 };

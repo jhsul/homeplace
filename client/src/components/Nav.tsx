@@ -38,120 +38,119 @@ const Nav: FunctionComponent = () => {
 
     mutate(null);
   };
+  //        className="navbar navbar-expand-md navbar-light bg-light fixed-top px-2 mx-0"
 
   return (
-    <>
-      <nav
-        className="navbar navbar-expand-md navbar-light bg-light sticky-top px-2 mx-0"
-        id="navbar"
+    <nav
+      className="navbar navbar-expand-md navbar-light bg-light sticky-top fixed-left px-2 mx-0"
+      id="navbar"
+    >
+      {usersOnline ? (
+        <a className="navbar-brand text-success" href="#">
+          {`Connected (${usersOnline} online)`}
+        </a>
+      ) : (
+        <a className="navbar-brand text-danger" href="#">
+          Not Connected :(
+        </a>
+      )}
+
+      <button
+        className="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarContent"
+        aria-controls="navbarContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
       >
-        {usersOnline ? (
-          <a className="navbar-brand text-success" href="#">
-            {`Connected (${usersOnline} online)`}
-          </a>
-        ) : (
-          <a className="navbar-brand text-danger" href="#">
-            Not Connected :(
-          </a>
-        )}
+        <span className="navbar-toggler-icon"></span>
+      </button>
 
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarContent"
-          aria-controls="navbarContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
+      <div className="collapse navbar-collapse" id="navbarContent">
+        <ul className="navbar-nav ms-auto">
+          <li className="nav-item">
+            <a className="nav-link" href="https://pages.jackhsullivan.com">
+              About
+            </a>
+          </li>
 
-        <div className="collapse navbar-collapse" id="navbarContent">
-          <ul className="navbar-nav ms-auto">
-            <li className="nav-item">
-              <a className="nav-link" href="https://pages.jackhsullivan.com">
-                About
+          {username ? (
+            <li className="nav-item dropdown">
+              <a
+                className="dropdown-toggle btn btn-outline-secondary"
+                href="#"
+                id="userDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                {`Hello, ${username}`}
               </a>
-            </li>
-
-            {username ? (
-              <li className="nav-item dropdown">
-                <a
-                  className="dropdown-toggle btn btn-outline-secondary"
-                  href="#"
-                  id="userDropdown"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  {`Hello, ${username}`}
+              <div
+                className="dropdown-menu dropdown-menu-end"
+                aria-labelledby="userDropdown"
+              >
+                <a className="dropdown-item" onClick={handleLogout}>
+                  Log Out
                 </a>
-                <div
-                  className="dropdown-menu dropdown-menu-end"
-                  aria-labelledby="userDropdown"
+              </div>
+            </li>
+          ) : (
+            <>
+              <li className="nav-item">
+                <a
+                  className="nav-link"
+                  style={{ cursor: "pointer" }}
+                  onClick={function () {
+                    setIsLoggingIn(true);
+                  }}
                 >
-                  <a className="dropdown-item" onClick={handleLogout}>
-                    Log Out
-                  </a>
-                </div>
+                  Login
+                </a>
               </li>
-            ) : (
-              <>
-                <li className="nav-item">
-                  <a
-                    className="nav-link"
-                    style={{ cursor: "pointer" }}
-                    onClick={function () {
-                      setIsLoggingIn(true);
-                    }}
-                  >
-                    Login
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a
-                    className="nav-link"
-                    style={{ cursor: "pointer" }}
-                    onClick={function () {
-                      setIsSigningUp(true);
-                    }}
-                  >
-                    Signup
-                  </a>
-                </li>
-              </>
-            )}
-          </ul>
-        </div>
-        <Modal
-          show={isLoggingIn}
-          onHide={function () {
-            setIsLoggingIn(false);
+              <li className="nav-item">
+                <a
+                  className="nav-link"
+                  style={{ cursor: "pointer" }}
+                  onClick={function () {
+                    setIsSigningUp(true);
+                  }}
+                >
+                  Signup
+                </a>
+              </li>
+            </>
+          )}
+        </ul>
+      </div>
+      <Modal
+        show={isLoggingIn}
+        onHide={function () {
+          setIsLoggingIn(false);
+        }}
+      >
+        <Login
+          setIsLoggingIn={function (value) {
+            setIsLoggingIn(value);
           }}
-        >
-          <Login
-            setIsLoggingIn={function (value) {
-              setIsLoggingIn(value);
-            }}
-          />
-        </Modal>
+        />
+      </Modal>
 
-        <Modal
-          show={isSigningUp}
-          onHide={function () {
-            setIsSigningUp(false);
+      <Modal
+        show={isSigningUp}
+        onHide={function () {
+          setIsSigningUp(false);
+        }}
+      >
+        <Signup
+          setIsSigningUp={function (value) {
+            setIsSigningUp(value);
           }}
-        >
-          <Signup
-            setIsSigningUp={function (value) {
-              setIsSigningUp(value);
-            }}
-          />
-        </Modal>
-      </nav>
-    </>
+        />
+      </Modal>
+    </nav>
   );
 };
 

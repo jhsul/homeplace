@@ -38,8 +38,7 @@ export const broadcast = (message: WebSocketMessage) => {
 
 // Establish connections to redis and mongo
 
-getRedis();
-getDb();
+//getDb();
 
 store.on("update", () => {
   console.log("Session updated");
@@ -89,3 +88,5 @@ wss.on("connection", (ws: WebSocket, req: Request) => {
 server.listen(port, () => {
   console.log(`🎉 http://localhost:${port}`);
 });
+
+getRedis();

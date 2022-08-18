@@ -1,5 +1,12 @@
-import { FormEventHandler, FunctionComponent, useRef, useState } from "react";
+import {
+  FormEventHandler,
+  FunctionComponent,
+  useContext,
+  useRef,
+  useState,
+} from "react";
 import useUser from "../hooks/user";
+import { AppStateContext } from "./App";
 
 interface SignupProps {
   setIsSigningUp: (value: boolean) => void;
@@ -9,6 +16,8 @@ const Signup: FunctionComponent<SignupProps> = ({ setIsSigningUp }) => {
   const nameRef = useRef<HTMLInputElement | null>(null);
   const passRef = useRef<HTMLInputElement | null>(null);
   const confirmRef = useRef<HTMLInputElement | null>(null);
+
+  const { appState, setAppState } = useContext(AppStateContext);
 
   const { username: _, mutate } = useUser();
 
@@ -46,6 +55,7 @@ const Signup: FunctionComponent<SignupProps> = ({ setIsSigningUp }) => {
     console.log("Signed up!");
 
     mutate({ username });
+    setAppState((s) => ({ ...s, error: null }));
     setIsSigningUp(false);
   };
   return (

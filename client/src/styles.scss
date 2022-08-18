@@ -12,6 +12,8 @@ body {
   width: 100%;
   display: flex;
   flex-direction: column;
+  height: 100vh;
+  //background-color: #808080;
   //border: 1px solid red;
 }
 
@@ -33,10 +35,25 @@ body {
   width: min(100%, 200pt);
 }
 
-#board {
-  border: 1px solid green;
+.board-container {
+  background-color: #808080;
 }
 
+/*
+.board {
+  position: relative;
+  top: 0;
+  left: 25%;
+
+  transform-origin: top left;
+  transform: scale(2);
+  border: 1px solid green;
+}
+*/
 .placer {
-  border: 1px solid purple;
+  //border: 1px solid purple;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: "fit-content";
 }

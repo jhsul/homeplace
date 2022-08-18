@@ -1,5 +1,12 @@
-import { FormEventHandler, FunctionComponent, useRef, useState } from "react";
+import {
+  FormEventHandler,
+  FunctionComponent,
+  useContext,
+  useRef,
+  useState,
+} from "react";
 import useUser from "../hooks/user";
+import { AppStateContext } from "./App";
 
 interface LoginProps {
   setIsLoggingIn: (value: boolean) => void;
@@ -9,6 +16,8 @@ const Login: FunctionComponent<LoginProps> = ({ setIsLoggingIn }) => {
   const { username, mutate } = useUser();
   const nameRef = useRef<HTMLInputElement | null>(null);
   const passRef = useRef<HTMLInputElement | null>(null);
+
+  const { appState, setAppState } = useContext(AppStateContext);
 
   const [error, setError] = useState<string | null>(null);
 
@@ -42,6 +51,7 @@ const Login: FunctionComponent<LoginProps> = ({ setIsLoggingIn }) => {
     console.log("Logged in");
 
     mutate({ username: body.username });
+    setAppState((s) => ({ ...s, error: null }));
     setIsLoggingIn(false);
   };
   return (
