@@ -1,3 +1,3 @@
+### homeplace
 
-###  homeplace
-r/place for my home server! public messageboard
+r/place for my home server! public messageboard. pls be nice
