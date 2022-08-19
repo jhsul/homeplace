@@ -42,7 +42,7 @@ const Nav: FunctionComponent = () => {
 
   return (
     <nav
-      className="navbar navbar-expand-md navbar-light bg-light sticky-top fixed-left px-2 mx-0"
+      className="navbar navbar-expand-md navbar-light bg-light fixed-top px-2 mx-0"
       id="navbar"
     >
       {usersOnline ? (

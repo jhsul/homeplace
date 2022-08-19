@@ -8,6 +8,7 @@ import MongoStore from "connect-mongo";
 dotenv.config({ path: "../.env" });
 
 import auth from "./middleware/auth";
+import ip from "./middleware/ip";
 
 import login from "./routes/login";
 import signup from "./routes/signup";
@@ -44,6 +45,8 @@ store.on("update", () => {
   console.log("Session updated");
 });
 
+//app.set("trust proxy", true);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -59,6 +62,8 @@ app.use(
     store,
   })
 );
+
+//app.use(ip);
 
 // Statically serve the vite frontend
 app.use(express.static("../client/dist"));
