@@ -6,7 +6,7 @@ const redisClient = createClient();
 
 redisClient.on("connect", () => {
   //console.log("Connected to redis. Running full bitfield build from mongo");
-  buildFromMongo();
+  //buildFromMongo();
 });
 
 export const getRedis = async () => {
@@ -17,8 +17,7 @@ export const getRedis = async () => {
   return redisClient;
 };
 
-// TODO: Finish this
-const buildFromMongo = async () => {
+export const buildFromMongo = async () => {
   console.log("Beginning redis build from mongo at " + new Date());
   const db = await getDb();
 
@@ -56,4 +55,5 @@ const buildFromMongo = async () => {
     console.log(redisCommand);
     await redisClient.sendCommand(redisCommand);
   }
+  return redisClient;
 };

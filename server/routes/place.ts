@@ -3,8 +3,10 @@ import { getDb } from "../db";
 import { getRedis } from "../redis";
 import { broadcast } from "../main";
 import type { User } from "../models";
+import { Db } from "mongodb";
+import { RedisClientType } from "@redis/client";
 
-const place: RequestHandler = async (req, res) => {
+const place: RequestHandler = (req, res) => {
   const { x, y, color } = req.body;
 
   // Catch bad input(s)
@@ -28,23 +30,16 @@ const place: RequestHandler = async (req, res) => {
     return;
   }
 
-  const db = await getDb();
-  const redis = await getRedis();
+  //@ts-ignore
+  const db = req.db as Db;
 
-  const user = (await db
-    .collection("users")
-    //@ts-ignore
-    .findOne({ username: req.session.username })) as User;
+  //@ts-ignore
+  const redis = req.redis as RedisClientType;
 
-  if (
-    Date.now() - new Date(user.latest).getDate() <
-    parseInt(process.env.DELAY!)
-  ) {
-    res.status(400).json({ error: "You're too fast" });
-    return;
-  }
+  //@ts-ignore
+  const username = req.session.username as string;
 
-  // At this point, we can place the pixel. Notice the priority ahead!
+  console.log({ username, x, y, color });
 
   // Immediately update websocket clients
   broadcast({ type: "placement", data: { x, y, color } });
@@ -60,32 +55,17 @@ const place: RequestHandler = async (req, res) => {
     color.toString(),
   ];
 
-  console.log("Redis args: " + redisArgs);
-  await redis.sendCommand(redisArgs);
+  //console.log("Redis args: " + redisArgs);
+  redis.sendCommand(redisArgs);
 
   // Finally, update database
-  const { insertedId } = await db.collection("history").insertOne({
-    x,
-    y,
-    color,
-    //@ts-ignore
-    username: req.session.username,
-    date: Date.now(),
-  });
-
-  await db.collection("users").updateOne(
-    //@ts-ignore
-    { username: req.session.username },
-    { $inc: { pixels: -1 }, $push: { history: insertedId } }
-  );
-
-  await db.collection("pixels").updateOne(
+  db.collection("pixels").updateOne(
     {
       _id: `${x},${y}`,
     },
     {
-      $set: { color },
-      $push: { history: insertedId },
+      //@ts-ignore
+      $set: { color, author: req.session.username },
     },
     { upsert: true }
   );

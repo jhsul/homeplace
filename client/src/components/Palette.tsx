@@ -25,70 +25,62 @@ const Palette: FunctionComponent = () => {
   */
 
   return (
-    <div
-      style={{
-        width: "fit-content",
-        height: "fit-content",
-        border: "1px solid purple",
-      }}
+    <nav
+      className="navbar navbar-light bg-light fixed-bottom px-2 mx-0"
+      style={{ justifyContent: "space-around", flex: 0 }}
+      id="palette"
     >
-      <nav
-        className="navbar navbar-light bg-light fixed-bottom px-2 mx-0"
-        style={{ justifyContent: "space-around", flex: 0 }}
-        id="palette"
-      >
-        <div className="placer">
-          <p className="lead">
-            {appState.error ? (
-              <i className="text-danger lead">{appState.error}</i>
-            ) : (
-              <i>{`${appState.x}, ${appState.y}`}</i>
-            )}
-          </p>
-          <div
-            style={{
-              display: "grid",
-              width: "fit-content",
-              gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr",
-            }}
-          >
-            {colors.map((color, i) => (
-              <div
-                onClick={() => {
-                  setAppState((s) => ({ ...s, color: i }));
-                }}
-                key={i}
-                style={{
-                  backgroundColor: color,
-                  margin: "5pt",
-                  width: "20pt",
-                  height: "20pt",
-                  border: "1px solid black",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  //gridRow: Math.floor(i / 8),
-                  //gridColumn: i % 8,
-                }}
-              >
-                {i === appState.color && (
-                  <div
-                    style={{
-                      height: "10pt",
-                      width: "10pt",
-                      backgroundColor: "white",
-                      border: "1px solid black",
-                      borderRadius: "50%",
-                      display: "inline-block",
-                    }}
-                  ></div>
-                )}
-              </div>
-            ))}
-          </div>
+      <div className="placer">
+        <p className="lead">
+          {appState.error ? (
+            <i className="text-danger lead">{appState.error}</i>
+          ) : (
+            <i>{`${appState.x}, ${appState.y}`}</i>
+          )}
+        </p>
+        <div
+          style={{
+            display: "grid",
+            width: "fit-content",
+            gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr",
+          }}
+        >
+          {colors.map((color, i) => (
+            <div
+              onClick={() => {
+                setAppState((s) => ({ ...s, color: i }));
+              }}
+              key={i}
+              style={{
+                backgroundColor: color,
+                margin: "5pt",
+                width: "20pt",
+                height: "20pt",
+                border: "1px solid black",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                //gridRow: Math.floor(i / 8),
+                //gridColumn: i % 8,
+              }}
+            >
+              {i === appState.color && (
+                <div
+                  style={{
+                    height: "10pt",
+                    width: "10pt",
+                    backgroundColor: "white",
+                    border: "1px solid black",
+                    borderRadius: "50%",
+                    display: "inline-block",
+                  }}
+                ></div>
+              )}
+            </div>
+          ))}
         </div>
-      </nav>
-    </div>
+      </div>
+    </nav>
   );
 };
 
