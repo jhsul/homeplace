@@ -40,6 +40,15 @@ export const broadcast = (message: WebSocketMessage) => {
   }
 };
 
+const limiter = rateLimit({
+  windowMs: 2000,
+  //@ts-ignore
+  max: process.env.RATE_LIMIT!,
+  message: JSON.stringify({ error: "Too fast" }),
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 // Establish connections to redis and mongo
 
 //getDb();
@@ -80,8 +89,7 @@ app.get("/board", board);
 
 app.post("/signup", signup);
 
-// Assign middleware to /place afer redis is ready
-//app.post("/place", limiter, auth, place); // limit /place
+app.use("/place", limiter, auth, place);
 app.get("/me", auth, me);
 app.delete("/me", auth, logout);
 
@@ -97,21 +105,6 @@ wss.on("connection", (ws: WebSocket, req: Request) => {
 getRedis()
   .then(buildFromMongo)
   .then((client) => {
-    const limiter = rateLimit({
-      windowMs: 2000,
-      //@ts-ignore
-      max: process.env.RATE_LIMIT!,
-      message: JSON.stringify({ error: "Too fast" }),
-      standardHeaders: true,
-      legacyHeaders: false,
-      store: new RedisStore({
-        sendCommand: (...args: string[]) => {
-          return client.sendCommand(args);
-        },
-      }),
-    });
-
-    app.use("/place", limiter, auth, place);
     server.listen(port, () => {
       console.log(`🎉 http://localhost:${port}`);
     });

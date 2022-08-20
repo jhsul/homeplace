@@ -7,20 +7,24 @@ import { Db } from "mongodb";
 import { RedisClientType } from "@redis/client";
 
 const place: RequestHandler = (req, res) => {
-  const { x, y, color } = req.body;
+  //const { x, y, color } = req.body;
+
+  const x = parseInt(req.body.x);
+  const y = parseInt(req.body.y);
+  const color = parseInt(req.body.color);
 
   // Catch bad input(s)
-  if (x == null || y == null || color == null) {
-    res.status(400).json({ error: "Missing parameters" });
+  if (!x || !y || !color) {
+    res.status(400).json({ error: "Bad parameters" });
     return;
   }
 
-  if (isNaN(parseInt(x)) || isNaN(parseInt(y)) || isNaN(parseInt(color))) {
-    res.status(400).json({ error: "Integers only" });
-    return;
-  }
-
-  if (x < 0 || x >= process.env.WIDTH! || y < 0 || y >= process.env.HEIGHT!) {
+  if (
+    x < 0 ||
+    x >= parseInt(process.env.WIDTH!) ||
+    y < 0 ||
+    y >= parseInt(process.env.HEIGHT!)
+  ) {
     res.status(400).json({ error: "Invalid coordinates" });
     return;
   }
