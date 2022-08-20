@@ -14,7 +14,7 @@ const place: RequestHandler = (req, res) => {
   const color = parseInt(req.body.color);
 
   // Catch bad input(s)
-  if (!x || !y || !color) {
+  if (isNaN(x) || isNaN(y) || isNaN(color)) {
     res.status(400).json({ error: "Bad parameters" });
     return;
   }
