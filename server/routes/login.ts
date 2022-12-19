@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 import { getDb } from "../db";
 
